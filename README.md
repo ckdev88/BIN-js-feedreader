@@ -1,0 +1,1 @@
+This project is to see if I can make my db-feedreader better, and not dependable on third party databases like Supabase, which seem a bit overkill. Plus, this should just be for personal use, which means my data should not need to travel unnecessarily. The list of feeds/blogs will first just be a simple list, later this will be tried with SQLite.
