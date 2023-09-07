@@ -1,7 +1,6 @@
-body {background:black;color:white;font-size:16px;}
+body {background:black;color:white;font-size:14px;}
 #rss h2{color:lime;font-size:1.2rem;}
 #rss a{color:#fff;cursor:pointer;}
-#rss a{display:block;line-height:2em;background-color:rgba(255,255,255,.1);padding:0 1em;text-decoration:
-	none;transition:background-color .2s linear,text-decoration .2s linear}
+#rss a{display:block;line-height:2em;background-color:rgba(255,255,255,.1);padding:0 1em;text-decoration:none;transition:background-color .2s linear,text-decoration .2s linear;border-bottom:1px dotted rgba(255,255,255,.1)}
 #rss a:hover{background-color:rgba(255,255,255,.2);text-decoration: underline;}
-#rss .pubdate{float:right;}
+#rss .pubdate{float:right;opacity:.5}

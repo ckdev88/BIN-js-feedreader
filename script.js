@@ -18,16 +18,12 @@ const feedlist = [
 	'https://hackernoon.com/tagged/javascript/feed',
 	'https://andrewkelley.me/rss.xml'
 ];
-console.log(feedlist);
-
-const timeElapsed = Date.now();
-const today = new Date(timeElapsed);
-console.log('Nu:', today.toUTCString());
 
 const loopfeeds = () => {
-	console.log('looping feeds');
+	const articleLink = (title, link, date) => {
+		return `<a href="${link}" target="_blank">${title} <span class="pubdate">${date}</span></a>`;
+	}
 	for (feed of feedlist) {
-
 		fetch(feed)
 			.then(response => response.text())
 			.then(string => new window.DOMParser().parseFromString(string, 'text/xml'))
@@ -36,44 +32,36 @@ const loopfeeds = () => {
 				let feedTitle = data.querySelector('title').innerHTML.replace('<![CDATA[', '').replace(']]>', '');
 				loopfeedsHtml += `<h2>${feedTitle}</h2>`;
 				let items = data.querySelectorAll('item');
-				console.log('itemslength:', items.length);
 
 				if (items.length > 0) {
 					count = 0;
 					items.forEach(item => {
-						count += 1;
-						if (count < 3) {
+						if (count < 5) {
+							count += 1;
 							let pubDate = item.querySelector('pubDate').innerHTML;
 							let title = item.querySelector('title').innerHTML.replace('<![CDATA[', '').replace(']]>', '');
 							let link = item.querySelector('link').innerHTML;
-							loopfeedsHtml += `<a href="${link}" target="_blank">${title} <span class="pubdate">${pubDate}</span></a>`;
+							loopfeedsHtml += articleLink(title, link, pubDate);
 						}
 					});
 				}
-				let entries = data.querySelectorAll('entry');
-				console.log('entrieslength:', entries.length);
-				if (entries.length > 0) {
+				items = data.querySelectorAll('entry');
+				if (items.length > 0) {
 					count = 0;
-					entries.forEach(entry => {
-						console.log(entry);
-						count += 1;
-						if (count < 3) {
-							let pubDate = entry.querySelector('updated').innerHTML;
-							let title = entry.querySelector('title').innerHTML.replace('<![CDATA[', '').replace(']]>', '');
-							let link = entry.querySelector('link').innerHTML;
-							loopfeedsHtml += `<a href="${link}" target="_blank">${title} <span class="pubdate">${pubDate}</span></a>`;
+					items.forEach(item => {
+						if (count < 5) {
+							count += 1;
+							let pubDate = item.querySelector('updated').innerHTML;
+							let title = item.querySelector('title').innerHTML.replace('<![CDATA[', '').replace(']]>', '');
+							let link = item.querySelector('link').innerHTML;
+							loopfeedsHtml += articleLink(title, link, pubDate);
 						}
-						console.log(entry.querySelector('title').innerHTML);
 					});
 				}
-				const rss = document.getElementById('rss');
-				rss.innerHTML += loopfeedsHtml;
-				console.log('-----------------------end----------------------');
+				document.getElementById('rss').innerHTML += loopfeedsHtml;
 			})
 			.catch(console.error)
 			;
 	}
-
-
 }
 loopfeeds(feedlist);
