@@ -20,6 +20,14 @@ const feedlist = [
 ];
 
 const loopfeeds = () => {
+	const sanitizedDateTime = (datetime) => {
+		datetime = datetime.replace('+0000', '');
+		datetime = datetime.replace('00:00:00', '');
+		datetime = datetime.replace('TZ', '');
+		datetime = datetime.replace('GMT', '');
+		return datetime;
+	}
+
 	const articleLink = (title, link, date) => {
 		return `<a href="${link}" target="_blank">${title} <span class="pubdate">${date}</span></a>`;
 	}
@@ -38,7 +46,7 @@ const loopfeeds = () => {
 					items.forEach(item => {
 						if (count < 5) {
 							count += 1;
-							let pubDate = item.querySelector('pubDate').innerHTML;
+							let pubDate = sanitizedDateTime(item.querySelector('pubDate').innerHTML);
 							let title = item.querySelector('title').innerHTML.replace('<![CDATA[', '').replace(']]>', '');
 							let link = item.querySelector('link').innerHTML;
 							loopfeedsHtml += articleLink(title, link, pubDate);
@@ -51,7 +59,7 @@ const loopfeeds = () => {
 					items.forEach(item => {
 						if (count < 5) {
 							count += 1;
-							let pubDate = item.querySelector('updated').innerHTML;
+							let pubDate = sanitizedDateTime(item.querySelector('updated').innerHTML);
 							let title = item.querySelector('title').innerHTML.replace('<![CDATA[', '').replace(']]>', '');
 							let link = item.querySelector('link').innerHTML;
 							loopfeedsHtml += articleLink(title, link, pubDate);
