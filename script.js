@@ -82,6 +82,7 @@ const loopfeeds = () => {
 					if (firstItemDate.indexOf(currentYear, firstItemDate) !== -1) {
 						items.forEach(item => {
 							if (count < 5) {
+								let itemDate = item.querySelector('updated').innerHTML;
 								if (
 									itemDate.indexOf(currentYear, itemDate) !== -1
 									|| itemDate.indexOf((currentYear - 1), itemDate) !== -1
