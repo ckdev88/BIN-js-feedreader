@@ -52,16 +52,16 @@ const loopfeeds = () => {
 					const firstItemDate = items[0].querySelector('pubDate').innerHTML;
 					count = 0;
 					if (
-						firstItemDate.indexOf(currentYear, firstItemDate) >= 0
+						firstItemDate.indexOf(currentYear, firstItemDate) !== -1
 						||
-						firstItemDate.indexOf(currentYear - 1, firstItemDate) >= 0
+						firstItemDate.indexOf(currentYear - 1, firstItemDate) !== -1
 					) {
 						items.forEach(item => {
 							if (count < 5) {
 								let itemDate = item.querySelector('pubDate').innerHTML;
 								if (
-									itemDate.indexOf(currentYear, itemDate) > -1
-									|| itemDate.indexOf((currentYear - 1), itemDate) > -1
+									itemDate.indexOf(currentYear, itemDate) !== -1
+									|| itemDate.indexOf((currentYear - 1), itemDate) !== -1
 								) {
 									count += 1;
 									let pubDate = cleanUglyDate(item.querySelector('pubDate').innerHTML);
@@ -79,12 +79,12 @@ const loopfeeds = () => {
 					const firstItemDate = items[0].querySelector('updated').innerHTML;
 					count = 0;
 
-					if (firstItemDate.indexOf(currentYear, firstItemDate) >= 0) {
+					if (firstItemDate.indexOf(currentYear, firstItemDate) !== -1) {
 						items.forEach(item => {
 							if (count < 5) {
 								if (
-									itemDate.indexOf(currentYear, itemDate) > -1
-									|| itemDate.indexOf((currentYear - 1), itemDate) > -1
+									itemDate.indexOf(currentYear, itemDate) !== -1
+									|| itemDate.indexOf((currentYear - 1), itemDate) !== -1
 								) {
 									count += 1;
 									let pubDate = cleanUglyDate(item.querySelector('updated').innerHTML);
