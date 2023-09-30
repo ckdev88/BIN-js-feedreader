@@ -34,7 +34,7 @@ function cleanUglyDate(datetime) {
 const loopfeeds = () => {
 	const articleLink = (title, link, date) => {
 		date = cleanUglyDate(date);
-		return `<a href="${link}" target="_blank">${title} <span class="pubdate">${date} - ${currentYear}</span></a>`;
+		return `<a href="${link}" target="_blank"><span class="pubdate">${date} - ${currentYear}</span>${title}</a>`;
 	}
 	let tmpurl;
 	for (feed of feedlist) {
@@ -72,7 +72,7 @@ const loopfeeds = () => {
 							}
 						});
 					}
-					else loopfeedsHtml += `${feedTitle} is all old, time to clean up? Source: ${feedUri}`;
+					else loopfeedsHtml += `All old, time to clean up? See: ${feedUri}`;
 				}
 				items = data.querySelectorAll('entry');
 				if (items.length > 0) {
@@ -96,7 +96,7 @@ const loopfeeds = () => {
 							}
 						});
 					}
-					if (count === 0) loopfeedsHtml += `${feedTitle} is all old, time to clean up? Source: ${feedUri}`;
+					if (count === 0) loopfeedsHtml += `All old, time to clean up? See: ${feedUri}`;
 				}
 				document.getElementById('rss').innerHTML += loopfeedsHtml;
 			})
