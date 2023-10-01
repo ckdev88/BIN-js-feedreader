@@ -1,3 +1,4 @@
+
 const feedlist = [
 	'https://dmitripavlutin.com/rss.xml',
 	'https://davidwalsh.name/feed',
@@ -21,20 +22,72 @@ const feedlist = [
 
 const currentDate = new Date();
 const currentYear = currentDate.getFullYear();
-const dateFilters = ['+0000', '00:00:00', 'TZ', 'GMT', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun', ','];
 
-function cleanUglyDate(datetime) {
-	dateFilters.forEach(replacethem);
-	function replacethem(item) {
-		datetime = datetime.replace(item, '');
+function getMonthNum(monthName) {
+	const monthDictionary = {
+		'Jan': '01',
+		'Feb': '02',
+		'Mar': '03',
+		'Apr': '04',
+		'May': '05',
+		'Jun': '06',
+		'Jul': '07',
+		'Aug': '08',
+		'Sep': '09',
+		'Oct': '10',
+		'Nov': '11',
+		'Dec': '12',
+	};
+	for (let key in monthDictionary) {
+		if (key === monthName) return monthDictionary[monthName];
+	}
+}
+
+function cleanupDateChars(datetime) {
+	const dateFilters = [
+		'+0000',
+		'00:00:00',
+		'TZ',
+		'GMT',
+		','
+	];
+	for (let i = 0; i < dateFilters.length; i++) {
+		if (datetime.indexOf(dateFilters[i]) !== -1) datetime = datetime.replace(dateFilters[i], '');
 	}
 	return datetime;
 }
 
+function removeDayNames(datetime) {
+	const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+	for (let i = 0; i < dayNames.length; i++) {
+		if (datetime.indexOf(dayNames[i]) !== -1) return datetime.replace(dayNames[i], '');
+	};
+	return datetime;
+}
+
+function restructDate(datetime) {
+	datetime = datetime.trim();
+	datetime = removeDayNames(datetime);
+	datetime = cleanupDateChars(datetime);
+	datetime = datetime.substring(0, 12).trim().split(' '); // use first 12 chars leftover to deal with
+	if (datetime[1] !== undefined) { // where left over date is DD MMM YYYY
+		datetime['month'] = getMonthNum(datetime[1]);
+		datetime['year'] = datetime[2];
+		datetime['day'] = datetime[0]
+	}
+	else { // where left over date is YYYY-MM-DDTT
+		datetime = datetime[0].split('-');
+		datetime['year'] = datetime[0];
+		datetime['month'] = datetime[1];
+		datetime['day'] = datetime[2].substring(0, 2);
+	}
+	return `${datetime['year']}/${datetime['month']}/${datetime['day']}`;
+}
+
 const loopfeeds = () => {
 	const articleLink = (title, link, date) => {
-		date = cleanUglyDate(date);
-		return `<a href="${link}" target="_blank"><span class="pubdate">${date} - ${currentYear}</span>${title}</a>`;
+		date = restructDate(date);
+		return `<a href="${link}" target="_blank"><span class="pubdate">${date}</span>${title}</a>`;
 	}
 	let tmpurl;
 	for (feed of feedlist) {
@@ -64,7 +117,7 @@ const loopfeeds = () => {
 									|| itemDate.indexOf((currentYear - 1), itemDate) !== -1
 								) {
 									count += 1;
-									let pubDate = cleanUglyDate(item.querySelector('pubDate').innerHTML);
+									let pubDate = item.querySelector('pubDate').innerHTML;
 									let title = item.querySelector('title').innerHTML.replace('<![CDATA[', '').replace(']]>', '');
 									let link = item.querySelector('link').innerHTML;
 									loopfeedsHtml += articleLink(title, link, pubDate);
@@ -88,7 +141,7 @@ const loopfeeds = () => {
 									|| itemDate.indexOf((currentYear - 1), itemDate) !== -1
 								) {
 									count += 1;
-									let pubDate = cleanUglyDate(item.querySelector('updated').innerHTML);
+									let pubDate = item.querySelector('updated').innerHTML;
 									let title = item.querySelector('title').innerHTML.replace('<![CDATA[', '').replace(']]>', '');
 									let link = item.querySelector('link').innerHTML;
 									loopfeedsHtml += articleLink(title, link, pubDate);
